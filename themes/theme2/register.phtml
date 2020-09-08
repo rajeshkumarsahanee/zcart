@@ -1,0 +1,46 @@
+<!--banner-->
+<div class="banner1">
+    <div class="container">
+        <h3><a href="<?php echo $sys['config']['site_url']; ?>">Home</a> / <span>Register</span></h3>
+    </div>
+</div>
+<!--banner-->
+
+<!--content-->
+<div class="content">
+    <!--register-->
+    <div class="login">
+        <div class="main-agileits">
+            <div class="form-w3agile form1">
+                <h3>Register</h3>
+                <form id="regform" name="regform" action="<?php echo $sys['config']['site_url'].'/requests.php?f=register'; ?>" method="post">
+                    <div class="key">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <input  type="text" name="username" placeholder="Username" required=""/>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="key">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <input  type="text" name="email" placeholder="Email" required=""/>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="key">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <input  type="password" name="password" placeholder="Password" required=""/>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="key">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <input  type="password" name="cpassword" placholder="Confirm Password" required=""/>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="msg"></div>
+                    <input type="submit" name="register" value="Submit">
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!--register-->
+</div>
+<!--content-->       

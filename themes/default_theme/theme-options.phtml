@@ -1,0 +1,159 @@
+<?php
+$msg = "";
+if (isset($_POST['save'])) {
+    $home_sections = json_encode($_POST['home_sections']);
+
+    if (saveConfig("home_sections", $home_sections)) {
+        $msg = '<div class="alert alert-success">Saved Successfully</div>';
+    }
+}
+
+$configs = getConfig();
+$home_sections = isset($configs['home_sections']) ? json_decode($configs['home_sections'], true) : array();
+$s1ProductIds = isset($home_sections['0']['products']) ? $home_sections['0']['products'] : array();
+$s1Products = getProducts(array('id', 'name'), array('ids' => $s1ProductIds), 0, -1);
+$s2ProductIds = isset($home_sections['1']['products']) ? $home_sections['1']['products'] : array();
+$s2Products = getProducts(array('id', 'name'), array('ids' => $s2ProductIds), 0, -1);
+$s3ProductIds = isset($home_sections['2']['products']) ? $home_sections['2']['products'] : array();
+$s3Products = getProducts(array('id', 'name'), array('ids' => $s3ProductIds), 0, -1);
+?>
+<form action="" method="post">
+    <?= $msg ?>
+    <div class="box">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Home Page Section 1 Products</label>
+                        <input type="text" name="home_sections[0][name]" value="<?= isset($home_sections['0']['name']) ? $home_sections['0']['name'] : "" ?>" placeholder="Section Name" class="form-control"/>
+                        <input type="text" data-populate-in="s1-products" class="form-control select-product" placeholder="Select Products"/>
+                        <ul class="nav custom-nav populated-products" id="s1-products" data-section="0">
+
+                        </ul>
+                        <ul class="nav selected-products" id="s1-products-selected" style="min-height: 50px;">
+                            <?php foreach ($s1Products as $s1Product) { ?>
+                                <li>
+                                    <span class="delete" style="cursor:pointer;"><i class="fa fa-times"></i></span>
+                                    <input type="hidden" name="home_sections[0][products][]" value="<?= $s1Product['id'] ?>"/>
+                                    <?= $s1Product['name'] ?>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label>Home Page Section 2 Products</label>
+                        <input type="text" name="home_sections[1][name]" value="<?= isset($home_sections['1']['name']) ? $home_sections['1']['name'] : "" ?>" placeholder="Section Name" class="form-control"/>
+                        <input type="text" data-populate-in="s2-products" class="form-control select-product" placeholder="Select Products"/>
+                        <ul class="nav custom-nav populated-products" id="s2-products" data-section="1">
+
+                        </ul>
+                        <ul class="nav selected-products" id="s2-products-selected" style="min-height: 50px;">
+                            <?php foreach ($s2Products as $s2Product) { ?>
+                                <li>
+                                    <span class="delete" style="cursor:pointer;"><i class="fa fa-times"></i></span>
+                                    <input type="hidden" name="home_sections[1][products][]" value="<?= $s2Product['id'] ?>"/>
+                                    <?= $s2Product['name'] ?>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label>Home Page Section 3 Products</label>
+                        <input type="text" name="home_sections[2][name]" value="<?= isset($home_sections['2']['name']) ? $home_sections['2']['name'] : "" ?>" placeholder="Section Name" class="form-control"/>
+                        <input type="text" data-populate-in="s3-products" class="form-control select-product" placeholder="Select Products"/>
+                        <ul class="nav custom-nav populated-products" id="s3-products" data-section="2">
+
+                        </ul>
+                        <ul class="nav selected-products" id="s3-products-selected" style="min-height: 50px;">
+                            <?php foreach ($s3Products as $s3Product) { ?>
+                                <li>
+                                    <span class="delete" style="cursor:pointer;"><i class="fa fa-times"></i></span>
+                                    <input type="hidden" name="home_sections[2][products][]" value="<?= $s3Product['id'] ?>"/>
+                                    <?= $s3Product['name'] ?>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">                                        
+                        <label>Recommended Items (Home Page)</label>
+                        <input type="number" name="PRODUCTS_RECOMMENDED_COUNT_HOME_PAGE" value="<?= isset($config['PRODUCTS_RECOMMENDED_COUNT_HOME']) ? $config['PRODUCTS_RECOMMENDED_COUNT_HOME_PAGE'] : '' ?>" class="form-control"/>
+                        Determines how many recommended items are shown on home page
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">                                        
+                        <label>Recommended Items (Product Page)</label>
+                        <input type="number" name="PRODUCTS_RECOMMENDED_COUNT_PRODUCTS_PAGE" value="<?= isset($config['PRODUCTS_RECOMMENDED_COUNT_PRODUCTS_PAGE']) ? $config['PRODUCTS_RECOMMENDED_COUNT_PRODUCTS_PAGE'] : '' ?>" class="form-control"/>
+                        Determines how many recommended items are shown on product page
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">                                        
+                        <label>Customer Bought Items (Product Page)</label>
+                        <input type="number" name="CUSTOMERS_BOUGHT_COUNT_PRODUCT_PAGE" value="<?= isset($config['CUSTOMERS_BOUGHT_COUNT_PRODUCT_PAGE']) ? $config['CUSTOMERS_BOUGHT_COUNT_PRODUCT_PAGE'] : '' ?>" class="form-control"/>
+                        Determines how many recommended items are shown on home page
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">                                        
+                        <label>Customer Bought Items (Cart Page)</label>
+                        <input type="number" name="CUSTOMERS_BOUGHT_COUNT_CART_PAGE" value="<?= isset($config['CUSTOMERS_BOUGHT_COUNT_CART_PAGE']) ? $config['CUSTOMERS_BOUGHT_COUNT_CART_PAGE'] : '' ?>" class="form-control"/>
+                        Determines how many recommended items are shown on product page
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <input type="submit" name="save" value="Save" class="btn btn-success"/>
+        </div>
+    </div>
+</form>
+<script>
+    window.onload = function () {
+        $(".select-product").on("keyup focus", function (e) {
+            var name = $(this).val();
+            var populatein = $(this).attr("data-populate-in");
+            $.ajax({
+                type: "GET",
+                url: "<?= $sys['site_url'] ?>/requests.php?action=get-products&name=" + name,
+                success: function (response) {
+                    $("#" + populatein).html(response.html);
+                    $("#" + populatein).css("border", "solid thin #d2d6de");
+                    if (response.html === "") {
+                        $("#" + populatein).css("border", "none");
+                    }
+                }
+            });
+        });
+        $(".populated-products").on("click", "a", function (e) {
+            var selectedproductid = $(this).attr("data-id");
+            var eid = $(this).closest("ul").attr("id");
+            var section = $(this).closest("ul").attr("data-section");
+            var alreadyselected = false;
+            var html = '<li>'
+                    + '<span class="delete"><i class="fa fa-times"></i></span> '
+                    + '<input type="hidden" name="home_sections[' + section + '][products][]" value="' + $(this).attr("data-id") + '"/>'
+                    + $(this).text()
+                    + '</li>';
+            $("#" + eid + "-selected input").each(function () {
+                if (selectedproductid === $(this).val()) {
+                    alreadyselected = true;
+                }
+            });
+            if (!alreadyselected) {
+                $("#" + eid + "-selected").prepend(html);
+            }
+            //clear tags list
+            $(".populated-products").html("");
+            $(".populated-products").css("border", "none");
+            return false;
+        });
+        $(".selected-products").on("click", ".delete", function () {
+            $(this).parent().remove();
+        });
+    };
+</script>

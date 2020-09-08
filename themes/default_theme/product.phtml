@@ -1,0 +1,243 @@
+<?php
+$product = Sys_getProductBySlug(trim($_GET['slug']));
+$reviews = Sys_getReviews($product['id']);
+$relatedproducts = Sys_getProductsByCategoryId($product['category']['id'], 0, 4);
+?>
+<!-- Main Container Starts -->
+<div id="main-container" class="container">
+    <!-- Breadcrumb Starts -->
+    <ol class="breadcrumb">
+        <li><a href="<?php echo $sys['config']['site_url']; ?>">Home</a></li>
+        <li><a href="<?php echo $sys['config']['site_url'] . '/category/' . $product['category']['slug']; ?>"><?php echo $product['category']['name']; ?></a></li>
+        <li class="active"><?php echo $product['name']; ?></li>
+    </ol>
+    <!-- Breadcrumb Ends -->
+    <!-- Product Info Starts -->
+    <div class="row product-info full">
+        <!-- Left Starts -->
+        <div class="col-sm-4 images-block">
+            <?php $images = $product['imagesR']; ?>
+            <a href="<?php echo $images[0] ?>">
+                <img src="<?php echo $images[0] ?>" alt="Image" class="img-responsive thumbnail" />
+            </a>
+            <ul class="list-unstyled list-inline">
+                <?php foreach ($images as $img) { ?>
+                    <li>
+                        <a href="<?php echo $img; ?>" class="img-responsive thumbnail" style="width: 54px; height: 54px;">
+                            <img src="<?php echo $img; ?>" alt="Image" style="height: 40px;" />
+                        </a>
+                    </li>
+                <?php } ?>                        
+            </ul>
+        </div>
+        <!-- Left Ends -->
+        <!-- Right Starts -->
+        <div class="col-sm-8 product-details">
+            <div class="panel-smart">
+                <!-- Product Name Starts -->
+                <h2>
+                    <?php echo $product['name']; ?>
+                    <?php if(Sys_isAdminLogged()) { ?>
+                    <a class="btn btn-sm btn-primary pull-right" href="<?php echo $sys['config']['site_url'] . "/admin/product-edit?id=" . $product['id']; ?>">Edit</a>
+                    <?php } ?>
+                </h2>
+                <!-- Product Name Ends -->
+                <hr />
+                <p><?php echo nl2br($product['short_description']); ?></p>
+                <hr />
+                <!-- Price Starts -->
+                <div class="price">
+                    <span class="price-head">Price :</span><br/>
+                    <br/>
+                    <table class="table table-striped">                                
+                        <?php
+                        foreach ($product['sellers'] as $seller) {
+                            if ($seller['price'] <= 0) {
+                                continue;
+                            }
+                            ?>
+                            <tr>
+                                <th><?php echo $seller['name']; ?></th>
+                                <td><i class="fa fa-inr"></i> <?php echo $seller['price']; ?></td>
+                                <td style="text-align: right;"><a class="btn btn-cart" target="_blank" href="<?php echo $sys['config']['site_url'] . "/buynow?pid=" . $product['id'] . "&sid=" . $seller['id']; ?>">Buy Now</a></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+                <!-- Price Ends -->
+                <hr />
+                <!-- Available Options Starts -->
+                <div class="options">                            
+
+                </div>
+                <!-- Available Options Ends -->
+            </div>
+        </div>
+        <!-- Right Ends -->
+    </div>
+    <!-- Product Info Ends -->	
+    <!-- Tabs Starts -->
+    <div class="tabs-panel panel-smart">
+        <!-- Nav Tabs Starts -->
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab-description">Description</a>
+            </li>
+            <li>
+                <a href="#tab-specification">Specification</a>
+            </li>
+            <!--<li><a href="#tab-ainfo">Additional Information</a></li>-->
+            <li><a href="#tab-review">Review</a></li>
+        </ul>
+        <!-- Nav Tabs Ends -->
+        <!-- Tab Content Starts -->
+        <div class="tab-content clearfix">
+            <!-- Description Starts -->
+            <div class="tab-pane active" id="tab-description">
+                <p>
+                    <?php echo nl2br($product['long_description']); ?>
+                </p>                        
+            </div>
+            <!-- Description Ends -->
+            <!-- Specification Starts -->
+            <div class="tab-pane" id="tab-specification">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td colspan="2"><strong>Specification</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($product['attributes'] as $attribute) {
+                            if ($attribute['value'] == '') {
+                                continue;
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $attribute['name']; ?></td>
+                                <td><?php echo $attribute['value']; ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>                        
+            </div>
+            <!-- Specification Ends -->
+            <!-- Additional Information Starts -->
+            <!--                    <div class="tab-pane" id="tab-ainfo">
+                                    <p>
+                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                    </p>
+                                </div>-->
+            <!-- Additional Information Ends -->
+            <!-- Review Starts -->
+            <div class="tab-pane" id="tab-review">                        
+                <form id="reviewform" action="<?php echo $sys['config']['site_url'] . '/requests.php?f=postreview'; ?>" method="post" class="form-horizontal" style="display: none;">
+                    <input type="hidden" name="product_id" value="<?php echo $product['id'] ?>"/>
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-name">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="name" value="" id="input-name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-review">Review</label>
+                        <div class="col-sm-10">
+                            <textarea name="review" rows="5" id="input-review" class="form-control"></textarea>
+                            <div id="msg" class="help-block">
+                                Some note goes here..
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label ratings">Ratings</label>
+                        <div class="col-sm-10">
+                            Bad&nbsp;
+                            <input type="radio" name="rating" value="1" />
+                            &nbsp;
+                            <input type="radio" name="rating" value="2" />
+                            &nbsp;
+                            <input type="radio" name="rating" value="3" />
+                            &nbsp;
+                            <input type="radio" name="rating" value="4" />
+                            &nbsp;
+                            <input type="radio" name="rating" value="5" />
+                            &nbsp;Good
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" id="button-review" class="btn btn-warning">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <a id="post-review-button" href="javascript:showReviewForm()" class="btn btn-primary pull-right">Post Review</a>
+                <div class="clearfix"></div>
+                <?php foreach ($reviews as $review) { ?>
+                    <div class="" style="margin-top: 25px; border-top: thin solid rgb(228, 223, 215);">                            
+                        <strong><?php echo $review['name'] ?></strong><br/>
+                        <?php echo $review['review'] ?>
+                        <p class="rating">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $review['ratings']) {
+                                    echo '<i class="fa fa-star"></i>';
+                                } else {
+                                    echo '<i class="fa fa-star-o"></i>';
+                                }
+                            }
+                            ?>                                
+                        </p>
+                    </div>
+                <?php } ?>
+            </div>
+            <!-- Review Ends -->
+        </div>
+        <!-- Tab Content Ends -->
+    </div>
+    <!-- Tabs Ends -->		
+    <!-- Related Products Starts -->
+    <div class="product-info-box">
+        <h4 class="heading">Related Products</h4>
+        <!-- Products Row Starts -->
+        <div class="row">
+            <?php foreach ($relatedproducts as $relatedproduct) { ?>                    
+                <!-- Product # Starts -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-col">
+                        <div class="image">
+                            <img src="<?php echo $relatedproduct['imagesR'][0]; ?>" alt="product" class="img-responsive" style="height: 250px; margin: auto;"/>
+                        </div>
+                        <div class="caption">
+                            <h4><a href="<?php echo $sys['config']['site_url'] . '/product/' . $relatedproduct['slug']; ?>"><?php echo $relatedproduct['name']; ?></a></h4>
+                            <div class="description">
+                                <?php echo nl2br($relatedproduct['short_description']); ?>
+                            </div>  
+                            <div class="">
+                                <span class=""><?php echo $product['likes']; ?> Likes</span> | <span class=""><?php echo $product['views']; ?> Views</span>
+                            </div>
+                            <div class="cart-button button-group">
+                                <a href="<?php echo $sys['config']['site_url'] . '/like?pid=' . $product['id']; ?>" title="Like" class="btn btn-wishlist">
+                                    <i class="fa fa-thumbs-up"></i>
+                                </a>
+                                <a href="<?php echo $sys['config']['site_url'] . '/compare?pid=' . $relatedproduct['id']; ?>" title="Compare" class="btn btn-compare">
+                                    <i class="fa fa-bar-chart"></i>
+                                </a>
+                                <a href="<?php echo $sys['config']['site_url'] . '/product/' . $relatedproduct['slug']; ?>" class="btn btn-cart">
+                                    View Product
+                                    <i class="fa fa-eye"></i> 
+                                </a>									
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product # Ends -->
+            <?php } ?>                    
+        </div>
+        <!-- Products Row Ends -->
+    </div>
+    <!-- Related Products Ends -->
+</div>
+<!-- Main Container Ends -->

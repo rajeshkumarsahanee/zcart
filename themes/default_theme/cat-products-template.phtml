@@ -1,0 +1,53 @@
+<?php
+$i = 1;
+$start = true;
+foreach ($products as $product) {    
+    $images = $product['imagesR'];
+    $imageurl = "";
+    if (count($images) > 0) {
+        $imageurl = $images[0];
+    }
+    if ($start) {
+        echo '<div class="row">';
+        $start = false;
+    }
+    ?>
+    <!-- Product Starts -->
+    <div class="col-md-4 col-sm-6">
+        <div class="product-col">
+            <div class="image">
+                <img src="<?php echo $imageurl ?>" alt="<?php echo $product['name'] ?>" class="img-responsive" style="height: 250px; margin: auto;"/>
+            </div>
+            <div class="caption">
+                <h4><a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>"><?php echo $product['name']; ?></a></h4>
+                <div class="description">
+                    <?php echo nl2br($product['short_description']); ?>
+                </div>
+                <div class="">
+                    <span class=""><?php echo $product['likes']; ?> Likes</span> | <span class=""><?php echo $product['views']; ?> Views</span>
+                </div>
+                <div class="cart-button button-group">
+                    <a href="<?php echo $sys['config']['site_url'].'/like?pid=' . $product['id']; ?>" title="Like" class="btn btn-wishlist">
+                        <i class="fa fa-thumbs-up"></i>
+                    </a>
+                    <a href="<?php echo $sys['config']['site_url'].'/compare?pid=' . $product['id']; ?>" title="Compare" class="btn btn-compare">
+                        <i class="fa fa-bar-chart-o"></i>
+                    </a>
+                    <a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>" class="btn btn-cart">
+                        View Product
+                        <i class="fa fa-eye"></i> 
+                    </a>									
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Product Ends -->
+    <?php
+    if (($i++)%3 == 0) {
+        echo '</div><div class="row">';
+    }
+}
+if(!$start){
+ echo '</div>';   
+}
+?> 

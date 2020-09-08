@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?php echo $sys['title']; ?></title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="title" content="<?php echo $sys['title']; ?>">
+        <meta name="description" content="<?php echo filter_var($sys['description'], FILTER_SANITIZE_STRING); ?>">
+        <meta name="keywords" content="<?php echo filter_var($sys['keywords'], FILTER_SANITIZE_STRING); ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">                   
+
+        <!-- Google Web Fonts -->
+        <link href='//fonts.googleapis.com/css?family=Cagliostro' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,800italic,800,700italic,700,600italic,600,400italic,300italic,300' rel='stylesheet' type='text/css'>
+        
+        <!--css-->
+        <link rel="shortcut icon" type="image/png" href="<?php echo $sys['config']['theme_url']; ?>/images/icon.png"/>
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/bootstrap.css">        
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/font-awesome.css">        
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/style.css">
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/jstarbox.css" type="text/css" media="screen" charset="utf-8" />
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/coreSlider.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/owl.carousel.css" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/flexslider.css" type="text/css" media="screen" />
+        <?php echo (!empty($sys['config']['analyticsCode'])) ? $sys['config']['analyticsCode'] : ''; ?>
+    </head>
+    <body>
+        <?php echo Sys_LoadPage('header'); ?>
+
+        <?php echo $sys['content']; ?>                               
+
+        <?php echo Sys_LoadPage('footer'); ?>
+
+        <!-- JS FILES -->     
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/jquery.min.js"></script>                 
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/main.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/responsiveslides.min.js"></script>        
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/bootstrap-3.1.1.min.js"></script>
+        <!--<script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/simpleCart.min.js"></script>-->
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/jstarbox.js"></script>                                
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/coreSlider.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/imagezoom.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/owl.carousel.js"></script>
+        <script type="text/javascript" defer src="<?php echo $sys['config']['theme_url']; ?>/js/jquery.flexslider.js"></script>
+        <!-- End 'JS FILES' -->                      
+        <script>
+    $(function () {
+      $("#slider").responsiveSlides({
+        auto: true,
+        nav: true,
+        speed: 500,
+        namespace: "callbacks",
+        pager: true,
+      });
+    });
+        </script> 
+        <script type="text/javascript">
+                        jQuery(function() {
+                        jQuery('.starbox').each(function() {
+                                var starbox = jQuery(this);
+                                        starbox.starbox({
+                                        average: starbox.attr('data-start-value'),
+                                        changeable: starbox.hasClass('unchangeable') ? false : starbox.hasClass('clickonce') ? 'once' : true,
+                                        ghosting: starbox.hasClass('ghosting'),
+                                        autoUpdateAverage: starbox.hasClass('autoupdate'),
+                                        buttons: starbox.hasClass('smooth') ? false : starbox.attr('data-button-count') || 5,
+                                        stars: starbox.attr('data-star-count') || 5
+                                        }).bind('starbox-value-changed', function(event, value) {
+                                        if(starbox.hasClass('random')) {
+                                        var val = Math.random();
+                                        starbox.next().text(' '+val);
+                                        return val;
+                                        } 
+                                })
+                        });
+                });
+        </script>                			
+        <script>
+        $('#example1').coreSlider({
+          pauseOnHover: false,
+          interval: 3000,
+          controlNavEnabled: true
+        });
+        </script>        
+        <?php if($sys['page'] == 'register') { ?>
+        <script>
+            $(function(){
+                $("#regform").submit(function(e){                  
+                    e.preventDefault();                    
+                    $("#msg").html("please wait...");
+                    var action = $(this).attr('action');
+                    var data = $(this).serialize();                    
+                    $.ajax({
+                        type: 'POST',
+                        url: action,
+                        data: data
+                    }).done(function(data){                            
+                        if(data.code === '0') {
+                            //$('input[type=text]').val("");
+                            //$('input[type=password]').val("");
+                            window.location.href = data.redirecturl;
+                        }
+                        $("#msg").html(data.htmlmsg);
+                    }).fail(function(data){
+                        //any message
+                    });                
+                });
+            });
+        </script>
+        <?php } ?>
+        <?php if($sys['page'] == 'login') { ?>
+        <script>
+            $(function(){
+                $("#loginform").submit(function(e){                  
+                    e.preventDefault();                    
+                    $("#msg").html("please wait...");
+                    var action = $(this).attr('action');
+                    var data = $(this).serialize();                    
+                    $.ajax({
+                        type: 'POST',
+                        url: action,
+                        data: data
+                    }).done(function(data){                            
+                        $("#msg").html(data.htmlmsg);
+                        if(data.code === '0') {
+                            window.location.href = data.redirecturl;
+                        }                        
+                    }).fail(function(data){
+                        //any message
+                    });                
+                });
+            });
+        </script>
+        <?php } ?>
+         <?php if($sys['page'] == 'product') { ?>
+        <script>
+            $('.value-plus1').on('click', function () {
+                var divUpd = $(this).parent().find('.value1'), newVal = parseInt(divUpd.text(), 10) + 1;
+                divUpd.text(newVal);
+                $("#product_qty").val(newVal);
+            });
+
+            $('.value-minus1').on('click', function () {
+                var divUpd = $(this).parent().find('.value1'), newVal = parseInt(divUpd.text(), 10) - 1;
+                if (newVal >= 1) {
+                    divUpd.text(newVal);
+                    $("#product_qty").val(newVal);
+                }
+            });
+        </script>
+        <script>
+            $(function(){
+                $("#addtocartform").submit(function(e){                  
+                    e.preventDefault();                    
+                    //$("#msg").html("please wait...");
+                    var action = $(this).attr('action');
+                    var data = $(this).serialize();                    
+                    $.ajax({
+                        type: 'POST',
+                        url: action,
+                        data: data
+                    }).done(function(data){                            
+                        //$("#msg").html(data.htmlmsg);
+                        if(data.code === '0') {
+                            window.location.href = data.redirecturl;
+                            
+                        }                        
+                    }).fail(function(data){
+                        //any message
+                    });                
+                });
+            });
+        </script>
+        <?php } ?>
+        <?php if($sys['page'] == 'cart') { ?>
+        <script>
+                $(document).ready(function (c) {
+                    $('.close1').on('click', function (c) {
+                        $('.cart-header').fadeOut('slow', function (c) {
+                            $('.cart-header').remove();
+                        });
+                    });
+                });                            
+        </script>
+        <?php } ?>
+        <?php if($sys['page'] == 'checkout') { ?>
+        <script>
+            $(function(){
+                $("#checkoutform").submit(function(e){                  
+                    e.preventDefault();                    
+                    //$("#msg").html("please wait...");
+                    var action = $(this).attr('action');
+                    var data = $(this).serialize();                    
+                    $.ajax({
+                        type: 'POST',
+                        url: action,
+                        data: data
+                    }).done(function(data){                            
+                        //$("#msg").html(data.htmlmsg);
+                        if(data.code === '0') {
+                            window.location.href = data.redirecturl;                            
+                        }                        
+                    }).fail(function(data){
+                        //any message
+                    });                
+                });
+            });
+        </script>
+        <?php } ?>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?php echo $sys['title']; ?></title>
+        <meta charset="UTF-8">
+        <meta name="title" content="<?php echo $sys['title']; ?>">
+        <meta name="description" content="<?php echo filter_var($sys['description'], FILTER_SANITIZE_STRING); ?>">
+        <meta name="keywords" content="<?php echo filter_var($sys['keywords'], FILTER_SANITIZE_STRING); ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">                   
+
+        <!-- Google Web Fonts -->
+        <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" type="image/png" href="<?php echo $sys['config']['theme_url']; ?>/images/icon.png"/>
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/bootstrap.min.css">        
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/font-awesome/css/font-awesome.min.css">        
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/style.css">
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/responsive.css">                
+        <link rel="stylesheet" href="<?php echo $sys['config']['theme_url']; ?>/css/magnific-popup.css"> 
+        <?php echo (!empty($sys['config']['analyticsCode'])) ? $sys['config']['analyticsCode'] : ''; ?>
+    </head>
+    <body>
+        <?php echo Sys_LoadPage('header'); ?>
+
+        <?php echo $sys['content']; ?>                               
+
+        <?php echo Sys_LoadPage('footer'); ?>
+
+        <!-- JS FILES -->                    
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/jquery-1.11.1.min.js"></script>         
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/jquery-migrate-1.2.1.min.js"></script>	
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/bootstrap-hover-dropdown.min.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/jquery.magnific-popup.min.js"></script>
+        <script type="text/javascript" src="<?php echo $sys['config']['theme_url']; ?>/js/custom.js"></script>
+        <!-- End 'JS FILES' -->                      
+        <script type="text/javascript">
+            $(function () {
+                $("#qinput").keyup(function () {
+                    var qurl = '<?php echo $sys['config']['site_url']; ?>/requests.php?f=searchsuggestions&q=' + $(this).val()
+                    $.ajax({
+                        type: 'GET',
+                        url: qurl
+                    }).done(function (data) {
+                        $("#suggestions").html(data);
+                    }).fail(function (data) {
+
+                    });
+                });
+            });
+
+        </script>        
+        <script type="text/javascript">
+            $(function () {
+                $("#reviewform").submit(function (e) {
+                    e.preventDefault();
+                    var action = $(this).attr('action');
+                    var data = $(this).serialize();
+                    $.ajax({
+                        type: 'POST',
+                        url: action,
+                        data: data
+                    }).done(function (data) {
+                        $("#msg").html(data);
+                        $("#reviewform")[0].reset();
+                    }).fail(function (data) {
+                        $("#msg").html(data);
+                    });
+                });
+            });
+
+            function showReviewForm() {
+                $("#reviewform").show();
+                $("#post-review-button").hide();
+            }
+        </script> 
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<?php
+$i = 1;
+$start = true;
+foreach ($products as $product) {    
+    $images = $product['imagesR'];
+    $imageurl = "";
+    if (count($images) > 0) {
+        $imageurl = $images[0];
+    }
+    if ($start) {
+        echo '<div class="product-tab">';
+        $start = false;
+    }
+    ?>
+    <div class="col-md-4 product-tab-grid simpleCart_shelfItem">
+        <div class="grid-arr">
+            <div  class="grid-arrival">
+                <figure>		
+                    <a href="#" class="new-gri" data-toggle="modal" data-target="#myModal1">
+                        <div class="grid-img">
+                            <img  src="<?php echo $imageurl ?>" class="img-responsive" alt="">
+                        </div>
+                        <div class="grid-img">
+                            <img  src="<?php echo $imageurl ?>" class="img-responsive"  alt="">
+                        </div>			
+                    </a>		
+                </figure>	
+            </div>
+            <div class="block">
+                <div class="starbox small ghosting"> </div>
+            </div>
+            <div class="women">
+                <h6><a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>"><?php echo $product['name'] ?></a></h6>
+                <span class="size">XL / XXL / S </span>
+                <p ><del><i class="fa fa-inr"></i> 100.00</del> <em class="item_price"> <i class="fa fa-inr"></i> <?php echo $product['sellers'][$sys['config']['defaultSeller']]['price']; ?></em></p>
+                <a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+            </div>
+        </div>
+    </div>    
+    <?php
+    if (($i++)%4 == 0) {
+        echo '<div class="clearfix"></div></div><div class="row">';
+    }
+}
+if(!$start){
+ echo '</div>';   
+}
+?> 

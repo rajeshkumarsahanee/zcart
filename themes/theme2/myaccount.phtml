@@ -1,0 +1,75 @@
+<script>
+    $(document).ready(function () {
+        $("#owl-demo").owlCarousel({
+            items: 1,
+            lazyLoad: true,
+            autoPlay: true,
+            navigation: false,
+            navigationText: false,
+            pagination: true,
+        });
+    });
+</script>
+<?php
+$loggeduser = Sys_getUserData($_SESSION['username']);
+
+$name = isset($loggeduser['meta']['First_Name'])? $loggeduser['meta']['First_Name'] : "";
+$email = $loggeduser['email'];
+$sex = "";
+$address = "";
+$city = "";
+$state = "";
+$country = "";
+$pin = "";
+$mobile = "";
+
+$sname = isset($loggeduser['meta']['First_Name'])? $loggeduser['meta']['First_Name'] : "";
+$semail = $loggeduser['email'];
+$ssex = "";
+$saddress = "";
+$scity = "";
+$sstate = "";
+$scountry = "";
+$spin = "";
+$smobile = "";
+?>
+
+<div class="content">
+    <!--single-->
+    <div class="panel-info widget-shadow">
+        <h2 class="tittle">ACCOUNT INFORMATION</h2>
+        <div class="col-md-6 panel-grids">
+            <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">Contact Information</h3>  </div>
+                <div class="panel-body">Name: <?php echo $name; ?></div> 
+                <div class="panel-body">Email: <?php echo $email; ?></div> 
+                <div class="panel-body">Gender: <?php echo $sex; ?></div> 
+                <div class="panel-body">Address: <?php echo $address; ?></div> 
+                <div class="panel-body">City: <?php echo $city; ?></div> 
+                <div class="panel-body">State: <?php echo $state; ?></div> 
+                <div class="panel-body">Country: <?php echo $country; ?></div>
+                <div class="panel-body">Pin: <?php echo $pin; ?></div>  
+                <div class="panel-body">Mobile: <?php echo $mobile; ?></div>
+            </div>
+        </div>
+        <div class="col-md-6 panel-grids">
+            <div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">Shipping Address</h3> </div> 
+                <div class="panel-body">Name: <?php echo $sname; ?></div> 
+                <div class="panel-body">Email: <?php echo $semail; ?></div> 
+                <div class="panel-body">Gender: <?php echo $ssex; ?></div> 
+                <div class="panel-body">Address: <?php echo $saddress; ?></div> 
+                <div class="panel-body">City: <?php echo $scity; ?></div> 
+                <div class="panel-body">State: <?php echo $sstate; ?></div> 
+                <div class="panel-body">Country: <?php echo $scountry; ?></div>
+                <div class="panel-body">Pin: <?php echo $spin; ?></div>  
+                <div class="panel-body">Mobile: <?php echo $smobile; ?></div>
+            </div>
+        </div>
+
+        <div class="col-md-4 modal-grids">
+            <button type="button" class="btn btn-primary btn-lg">Edit User Profile</button>
+        </div>
+
+        <div class="clearfix"> </div>
+    </div>
+    <!--single-->
+</div>

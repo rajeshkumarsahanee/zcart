@@ -1,0 +1,40 @@
+<!--banner-->
+<div class="banner1">
+    <div class="container">
+        <h3><a href="<?php echo $sys['config']['site_url']; ?>">Home</a> / <span>Login</span></h3>
+    </div>
+</div>
+<!--banner-->
+
+<!--content-->
+<div class="content">
+    <!--login-->
+    <div class="login">
+        <div class="main-agileits">
+            <div class="form-w3agile">
+                <h3>Login To New Shop</h3>
+                <form id="loginform" name="loginform" action="<?php echo $sys['config']['site_url'].'/requests.php?f=login'; ?>" method="post">
+                    <div class="key">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <input  type="text" name="username" placeholder="Email" required="">
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="key">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <input  type="password" name="password" placeholder="Password" required="">
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="msg"></div>
+                    <input type="submit" name="login" value="Login">
+                </form>
+            </div>
+            <div class="forg">
+                <a href="<?php echo $sys['config']['site_url']; ?>/forget-password" class="forg-left">Forgot Password</a>
+                <a href="<?php echo $sys['config']['site_url']; ?>/register" class="forg-right">Register</a>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!--login-->
+</div>
+<!--content-->        

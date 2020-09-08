@@ -1,0 +1,115 @@
+<?php 
+    $lproducts = getLatestProducts();
+    $sproducts = getSpecialProducts();
+?>
+<?php echo loadPage("slider"); ?>
+<?php echo loadPage("banner_3_column"); ?>
+<!-- Latest Products Starts -->
+<section class="products-list">			
+    <div class="container">
+        <?php if (isset($lproducts) && $lproducts != null) { ?>
+            <!-- Heading Starts -->
+            <h2 class="product-head">Latest Products</h2>
+            <!-- Heading Ends -->
+            <!-- Products Row Starts -->
+            <div class="row">                        
+                <?php
+                foreach ($lproducts as $lproduct) {
+                    $images = $lproduct['imagesR'];
+                    $imageurl = "";
+                    if (count($images) > 0) {
+                        $imageurl = $images[0];
+                    }
+                    ?>
+                    <!-- Product # Starts -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="product-col">
+                            <div class="image">
+                                <img src="<?php echo $imageurl ?>" alt="<?php echo $lproduct['name'] ?>" class="img-responsive" style="height: 250px; margin: auto;"/>
+                            </div>
+                            <div class="caption">
+                                <h4><a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>"><?php echo $lproduct['name']; ?></a></h4>
+                                <div class="description">
+                                    <?php echo nl2br($lproduct['short_description']); ?>
+                                </div>
+                                <div class="">
+                                    <span class=""><?php echo $lproduct['likes']; ?> Likes</span> | <span class=""><?php echo $lproduct['views']; ?> Views</span>
+                                </div>
+                                <div class="cart-button button-group">
+                                    <a href="<?php echo $sys['config']['site_url'].'/products/like/' . $lproduct['id']; ?>" title="Like" class="btn btn-wishlist">
+                                        <i class="fa fa-thumbs-up"></i>
+                                    </a>
+                                    <a href="<?php echo $sys['config']['site_url'].'/products/compare/' . $lproduct['id']; ?>" title="Compare" class="btn btn-compare">
+                                        <i class="fa fa-bar-chart-o"></i>
+                                    </a>
+                                    <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>" class="btn btn-cart">
+                                        View Product
+                                        <i class="fa fa-eye"></i> 
+                                    </a>									
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product # Ends -->                
+                <?php } ?>                                                
+            </div>
+            <!-- Products Row Ends -->
+        <?php } ?>
+    </div>
+</section>
+<!-- Latest Products Ends -->
+<?php echo loadPage("banner_2_column"); ?>
+<!-- Specials Products Starts -->
+<section class="products-list">			
+    <div class="container">
+        <?php if (isset($sproducts) && $sproducts != null && count($sproducts) >= 1) { ?>
+            <!-- Heading Starts -->
+            <h2 class="product-head">Specials Products</h2>
+            <!-- Heading Ends -->
+            <!-- Products Row Starts -->
+            <div class="row">             
+                <?php
+                foreach ($sproducts as $sproduct) {
+                    $images = $sproduct['imagesR'];
+                    $imageurl = "";
+                    if (count($images) > 0) {
+                        $imageurl = $images[0];
+                    }
+                    ?>
+                    <!-- Product # Starts -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="product-col">
+                            <div class="image">
+                                <img src="<?php echo $imageurl ?>" alt="<?php echo $sproduct['name'] ?>" class="img-responsive" style="height: 250px; margin: auto;" />
+                            </div>
+                            <div class="caption">
+                                <h4><a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>"><?php echo $lproduct['name']; ?></a></h4>
+                                <div class="description">
+                                    <?php echo nl2br($sproduct['short_description']); ?>
+                                </div>
+                                <div class="">
+                                    <span class=""><?php echo $sproduct['likes']; ?> Likes</span> | <span class=""><?php echo $sproduct['views']; ?> Views</span>
+                                </div>
+                                <div class="cart-button button-group">
+                                    <a href="<?php echo $sys['config']['site_url'].'/products/like/' . $sproduct['id']; ?>" title="Like" class="btn btn-wishlist">
+                                        <i class="fa fa-thumbs-up"></i>
+                                    </a>
+                                    <a href="<?php echo $sys['config']['site_url'].'/products/compare/' . $sproduct['id']; ?>" title="Compare" class="btn btn-compare">
+                                        <i class="fa fa-bar-chart-o"></i>
+                                    </a>
+                                    <a href="<?php echo $sys['config']['site_url'].'/product/' . $sproduct['slug']; ?>" class="btn btn-cart">
+                                        View Product
+                                        <i class="fa fa-eye"></i> 
+                                    </a>									
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product # Ends -->                
+                <?php } ?>
+            </div>
+            <!-- Products Row Ends -->
+        <?php } ?>
+    </div>
+</section>
+<!-- Specials Products Ends -->

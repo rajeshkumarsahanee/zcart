@@ -1,0 +1,157 @@
+<?php
+$category = Sys_getCategoryBySlug(trim($_GET['slug']));
+$fattributes = Sys_getFilterableAttributesByCatId($category['id']);
+if (isset($_GET['filter'])) {
+    $products = Sys_getProductsByCategoryId($category['id'], 0, -1);
+    $fproducts = array();
+    $filtered = array();
+    foreach ($fattributes as $fattribute) {
+        if (isset($_GET[$fattribute['id']])) {
+            $av = $_GET[$fattribute['id']];
+            $filtered[$fattribute['id']] = $av;
+            foreach ($products as $product) {
+                //echo $fattribute['id'];
+                //print_r($av);
+                if (in_array($product['attributes'][$fattribute['id']]['value'], $av)) {
+                    $fproducts[$product['id']] = $product;
+                }
+            }
+            $products = $fproducts;
+        }
+    }
+} else if (isset($_REQUEST['q'])) {
+    $query = trim($_REQUEST['q']);
+    $products = Sys_getProductsByCategoryIdAndQuery($category['id'], trim($_REQUEST['q']), 0, 12);
+} else {
+    $products = Sys_getProductsByCategoryId($category['id'], 0, 12);
+}
+$lproducts = Sys_getLatestProducts($category['id']);
+$mvproduct = Sys_getMostViewedProduct($category['id']);
+?>
+<div class="banner1" style="background: url(<?php echo $category['image']; ?>)">
+    <div class="container">
+        <h3><a href="<?php echo $sys['config']['site_url']; ?>">Home</a> / <span>Products</span></h3>
+    </div>
+</div>
+<!-- Main Container Starts -->
+<div class="content">
+    <div class="products-agileinfo">
+        <h2 class="tittle"><?php echo $category['name']; ?></h2>
+        <div class="container">
+            <div class="product-agileinfo-grids w3l">
+                <div class="col-md-3 product-agileinfo-grid">                    
+                    <div class="top-rates">
+                        <h3>Latest Products</h3>
+                    <?php foreach ($lproducts as $latestproduct) { 
+                        $pimg = "http://placehold.it/62x95";
+                        foreach ($latestproduct['imagesR'] as $img) {
+                            $pimg = $pimg;
+                        }
+                        ?>
+                    <div class="recent-grids">
+                        <div class="recent-left">
+                            <a href="<?php echo $sys['config']['site_url']."/product/". $latestproduct['slug']; ?>"><img class="img-responsive " src="<?php echo $pimg; ?>" alt=""></a>	
+                        </div>
+                        <div class="recent-right">
+                            <h6 class="best2"><a href="<?php echo $sys['config']['site_url']."/product/". $latestproduct['slug']; ?>"><?php echo $latestproduct['name'] ?> </a></h6>
+                            <div class="block">
+                                <div class="starbox small ghosting"> </div>
+                            </div>
+                            <span class=" price-in1"> INR <?php echo $latestproduct['sellers'][$sys['config']['defaultSeller']]['price']; ?></span>
+                        </div>	
+                        <div class="clearfix"> </div>
+                    </div>
+                    <?php } ?>
+                    </div>
+                    <!--<div class="brand-w3l">
+                        <h3>Brands Filter</h3>
+                        <ul>
+                            <li><a href="#">Ralph Lauren</a></li>
+                            <li><a href="#">adidas</a></li>
+                            <li><a href="#">Bottega Veneta</a></li>
+                            <li><a href="#">Valentino</a></li>
+                            <li><a href="#">Nike</a></li>
+                            <li><a href="#">Burberry</a></li>
+                            <li><a href="#">Michael Kors</a></li>
+                            <li><a href="#">Louis Vuitton</a></li>
+                            <li><a href="#">Jimmy Choo</a></li>
+                        </ul>
+                    </div>-->
+                    <div class="cat-img">
+                        <img class="img-responsive " src="images/45.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-md-9 product-agileinfon-grid1 w3l">
+             <!--       <div class="product-agileinfon-top">
+                        <div class="col-md-6 product-agileinfon-top-left">
+                            <img class="img-responsive " src="images/img1.jpg" alt="">
+                        </div>
+                        <div class="col-md-6 product-agileinfon-top-left">
+                            <img class="img-responsive " src="images/img2.jpg" alt="">
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>-->
+                    
+                    <div class="mens-toolbar">
+                        <p >Showing 1–9 of 21 results</p>
+                        <p class="showing">Sorting By
+                            <select>
+                                <option value=""> Name</option>
+                                <option value="">  Rate</option>
+                                <option value=""> Color </option>
+                                <option value=""> Price </option>
+                            </select>
+                        </p> 
+                        <p>Show
+                            <select>
+                                <option value=""> 9</option>
+                                <option value="">  10</option>
+                                <option value=""> 11 </option>
+                                <option value=""> 12 </option>
+                            </select>
+                        </p>
+                        <div class="clearfix"></div>		
+                    </div>
+                    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav1 nav1-tabs left-tab" role="tablist">
+                            <ul id="myTab" class="nav nav-tabs left-tab" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true"><img src="<?php echo $sys['config']['theme_url']; ?>/images/menu1.png"></a></li>
+                                <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile"><img src="<?php echo $sys['config']['theme_url']; ?>/images/menu.png"></a></li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">                                    
+                                    <?php include 'cat-products-template.phtml'; ?>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+                                    <?php include 'cat-products-template2.phtml' ?>                                    
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Container Ends -->
+<script type="text/javascript">
+    var page = 1;
+    function viewmore() {
+        //$("#viewmore").click(function () {
+            $("#viewmore").hide();
+            $('#loading').show();
+            var lmurl = "<?php echo $sys['config']['site_url'] . '/requests.php?f=loadmoreproducts&cat=' . $category['slug']; ?>&page=" + page++;
+            $.ajax({
+                url: lmurl,
+                dataType: 'html',
+                success: function (html) {
+                    $('#pcrow').append(html);
+                    $('#loading').hide();
+                    if (html.trim() !== "") {
+                        $("#viewmore").show();
+                    }
+                }
+            });
+        //});
+    }
+</script>

@@ -1,0 +1,244 @@
+<?php
+$lproducts = Sys_getLatestProducts();
+$sproducts = Sys_getSpecialProducts();
+?>
+<?php echo Sys_LoadPage("slider"); ?>
+<div class="content">
+    <?php echo Sys_LoadPage("secondbanner"); ?>
+    <!--new-arrivals-->
+    <div class="new-arrivals-w3agile">
+        <div class="container">
+            <h2 class="tittle">New Arrivals</h2>
+            <div class="arrivals-grids">
+                <?php
+                                foreach ($sproducts as $lproduct) {
+                                    $images = $lproduct['imagesR'];
+                                    $imageurl = "";
+                                    if (count($images) > 0) {
+                                        $imageurl = $images[0];
+                                    }
+                                    ?>
+                                <div class="col-md-3 cap-left simpleCart_shelfItem">
+                                    <div class="grid-arr">
+                                        <div  class="grid-arrival">
+                                            <figure>		
+                                                <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>">
+                                                    <div class="grid-img">
+                                                        <img  src="<?php echo $imageurl ?>" class="img-responsive" alt="">
+                                                    </div>
+                                                    <div class="grid-img">
+                                                        <img  src="<?php echo $imageurl ?>" class="img-responsive"  alt="">
+                                                    </div>			
+                                                </a>		
+                                            </figure>	
+                                        </div>
+                                        <div class="block">
+                                            <div class="starbox small ghosting"> </div>
+                                        </div>
+                                        <div class="women">
+                                            <h6><a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>"><?php echo $lproduct['name']; ?></a></h6>
+                                           <!-- <span class="size">XL / XXL / S </span>-->
+                                            <p ><!--<del>$100.00</del>--><em class="item_price"><?php echo $lproduct['sellers'][$sys['config']['defaultSeller']]['price']; ?></em></p>
+                                            <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                                        </div>
+                                    </div>
+                                </div>                               
+                                    <?php } ?>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!--new-arrivals-->
+    <!--accessories-->
+    <div class="accessories-w3l">
+        <div class="container">
+            <h3 class="tittle">20% Discount on</h3>
+            <span>TRENDING DESIGNS</span>
+            <div class="button">
+                <a href="#" class="button1"> Shop Now</a>
+                <a href="#" class="button1"> Quick View</a>
+            </div>
+        </div>
+    </div>
+    <!--accessories-->
+    <!--Products-->
+    <div class="product-agile">
+        <div class="container">
+            <h2 class="tittle"> New Products</h2>
+            <div class="slider">
+                <div class="callbacks_container">
+                    <ul class="rslides" id="slider">
+                        <li>	 
+                            <div class="caption">
+                                <?php
+                                foreach ($lproducts as $lproduct) {
+                                    $images = $lproduct['imagesR'];
+                                    $imageurl = "";
+                                    if (count($images) > 0) {
+
+                                        $imageurl = $images[0];
+                                    }
+                                    ?>
+                                <div class="col-md-3 cap-left simpleCart_shelfItem">
+                                    <div class="grid-arr">
+                                        <div  class="grid-arrival">
+                                            <figure>		
+                                                <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>">
+                                                    <div class="grid-img">
+                                                        <img  src="<?php echo $imageurl ?>" class="img-responsive" alt="">
+                                                    </div>
+                                                    <div class="grid-img">
+                                                        <img  src="<?php echo $imageurl ?>" class="img-responsive"  alt="">
+                                                    </div>			
+                                                </a>		
+                                            </figure>	
+                                        </div>
+                                        <div class="block">
+                                            <div class="starbox small ghosting"> </div>
+                                        </div>
+                                        <div class="women">
+                                            <h6><a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>"><?php echo $lproduct['name']; ?></a></h6>
+                                            <span class="size">XL / XXL / S </span>
+                                            <p ><!--<del>&#8377; 100.00</del>--><em class="item_price"><?php echo $lproduct['sellers'][$sys['config']['defaultSeller']]['price']; ?></em></p>
+                                            <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                                        </div>
+                                    </div>
+                                </div>                               
+                                    <?php } ?>
+                                <div class="clearfix"></div>
+                            </div>
+                        </li>                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Products-->
+    <?php echo Sys_LoadPage("banner_bottom"); ?>
+    
+    
+    <div class="new-arrivals-w3agile">
+        <div class="container">
+            <h3 class="tittle1">Best Sellers</h3>
+            <div class="arrivals-grids">
+                <div class="col-md-3 arrival-grid simpleCart_shelfItem">
+                    <div class="grid-arr">
+                        <div  class="grid-arrival">
+                            <figure>		
+                                <a href="single.html">
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/p28.jpg" class="img-responsive" alt="">
+                                    </div>
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/p27.jpg" class="img-responsive"  alt="">
+                                    </div>			
+                                </a>		
+                            </figure>	
+                        </div>
+                        <div class="ribben">
+                            <p>NEW</p>
+                        </div>
+                        <div class="ribben1">
+                            <p>SALE</p>
+                        </div>
+                        <div class="block">
+                            <div class="starbox small ghosting"> </div>
+                        </div>
+                        <div class="women">
+                            <h6><a href="single.html">Sed ut perspiciatis unde</a></h6>
+                            <span class="size">XL / XXL / S </span>
+                            <p ><del>$100.00</del><em class="item_price">$70.00</em></p>
+                            <a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 arrival-grid simpleCart_shelfItem">
+                    <div class="grid-arr">
+                        <div  class="grid-arrival">
+                            <figure>		
+                                <a href="single.html">
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/p30.jpg" class="img-responsive" alt="">
+                                    </div>
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/p29.jpg" class="img-responsive"  alt="">
+                                    </div>			
+                                </a>		
+                            </figure>	
+                        </div>
+                        <div class="ribben2">
+                            <p>OUT OF STOCK</p>
+                        </div>
+                        <div class="block">
+                            <div class="starbox small ghosting"> </div>
+                        </div>
+                        <div class="women">
+                            <h6><a href="single.html">Sed ut perspiciatis unde</a></h6>
+                            <span class="size">XL / XXL / S </span>
+                            <p ><del>$100.00</del><em class="item_price">$70.00</em></p>
+                            <a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 arrival-grid simpleCart_shelfItem">
+                    <div class="grid-arr">
+                        <div  class="grid-arrival">
+                            <figure>		
+                                <a href="single.html">
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/s2.jpg" class="img-responsive" alt="">
+                                    </div>
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/s1.jpg" class="img-responsive"  alt="">
+                                    </div>			
+                                </a>		
+                            </figure>	
+                        </div>
+                        <div class="ribben1">
+                            <p>SALE</p>
+                        </div>
+                        <div class="block">
+                            <div class="starbox small ghosting"> </div>
+                        </div>
+                        <div class="women">
+                            <h6><a href="single.html">Sed ut perspiciatis unde</a></h6>
+                            <span class="size">XL / XXL / S </span>
+                            <p ><del>$100.00</del><em class="item_price">$70.00</em></p>
+                            <a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 arrival-grid simpleCart_shelfItem">
+                    <div class="grid-arr">
+                        <div  class="grid-arrival">
+                            <figure>		
+                                <a href="single.html">
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/s4.jpg" class="img-responsive" alt="">
+                                    </div>
+                                    <div class="grid-img">
+                                        <img  src="<?php echo $sys['config']['theme_url']; ?>/images/s3.jpg" class="img-responsive"  alt="">
+                                    </div>			
+                                </a>		
+                            </figure>	
+                        </div>
+                        <div class="ribben">
+                            <p>NEW</p>
+                        </div>
+                        <div class="block">
+                            <div class="starbox small ghosting"> </div>
+                        </div>
+                        <div class="women">
+                            <h6><a href="single.html">Sed ut perspiciatis unde</a></h6>
+                            <span class="size">XL / XXL / S </span>
+                            <p ><del>$100.00</del><em class="item_price">$70.00</em></p>
+                            <a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!--new-arrivals-->
+</div>

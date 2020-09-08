@@ -1,0 +1,125 @@
+<?php
+$rootcategories = Sys_getRootCategories(1);
+$categories = Sys_getCategories();
+?>
+<!--header-->
+<div class="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="top-left">
+                <a href="#"> Help  <i class="glyphicon glyphicon-phone" aria-hidden="true"></i> +91 704 203 0082</a>
+            </div>
+            
+            <!--<div id="cd-search" class="cd-search is-visible">
+                        <form action="#" method="post" style="margin-left:50%; margin-top:-1.2%;">
+                            <input name="Search" type="search" placeholder="Search...">
+                        </form>
+                    </div>-->
+                    
+                    
+            <div class="top-right">
+                <ul>
+                    <li><a href="<?php echo $sys['config']['site_url'] ?>/checkout">Checkout</a></li>
+                    <?php if(Sys_IsUserLogged()) { ?>
+                    <li><a href="<?php echo $sys['config']['site_url'] ?>/logout">Logout</a></li>
+                    <li><a href="<?php echo $sys['config']['site_url'] ?>/myaccount"> My Account </a></li> 
+                    <li style='color:#FFFFFF; font-weight:bold;'><?php echo "Hi' ". $_SESSION['username']; ?></li>   
+                    <?php } else { ?>
+                    <li><a href="<?php echo $sys['config']['site_url'] ?>/login">Login</a></li>
+                    <li><a href="<?php echo $sys['config']['site_url'] ?>/register"> Create Account </a></li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="heder-bottom">
+        <div class="container">
+            <div class="logo-nav">
+                <div class="logo-nav-left">
+                    <h1><a href="<?php echo $sys['config']['site_url'] ?>"><img src="http://visteriamedia.com/asia/themes/theme2/images/logo.png" class="" /></a></h1>
+                </div>
+                <div class="logo-nav-left1">
+                    <nav class="navbar navbar-default">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header nav_2">
+                            <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div> 
+                        <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+                            <ul class="nav navbar-nav">
+                                
+                                <!-- Mega Menu -->
+                                <?php foreach ($rootcategories as $rootcategory) { ?>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $rootcategory['name'] ?><b class="caret"></b></a>
+                                    <ul class="dropdown-menu multi-column columns-3">
+                                        <div class="row">
+                                            <?php                                            
+                                            foreach ($categories as $category) {
+                                                if ($category['main_category'] != $rootcategory['id']) {
+                                                    continue;
+                                                }
+                                                $subcategories = Sys_getSubCategories($category['id']);
+                                                if(count($subcategories) > 0) {
+                                            ?>
+                                            <div class="col-sm-3  multi-gd-img">
+                                                <ul class="multi-column-dropdown">
+                                                    <h6><?php echo $category['name']; ?></h6>
+                                                    <?php
+                                                    foreach ($subcategories as $subcategory) {
+                                                    /*if ($subcategory['main_category'] != $category['id']) {
+                                                        continue;
+                                                    } */                                                   
+                                                    ?>
+                                                    <li><a href="<?php echo $sys['config']['site_url'].'/category/' . $subcategory['slug'] ?>"><?php echo $subcategory['name']; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                            <?php } else { ?>
+                                            <li><a style="color: black;" href="<?php echo $sys['config']['site_url'].'/category/' . $category['slug'] ?>"><?php echo $category['name']; ?></a></li>
+                                            <?php }
+                                            }?>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </ul>
+                                </li>
+                                <?php } ?>
+                                
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <!--<div class="logo-nav-right">
+                    <ul class="cd-header-buttons">
+                        <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+                    </ul> <!-- cd-header-buttons --
+                    <div id="cd-search" class="cd-search">
+                        <form action="#" method="post">
+                            <input name="Search" type="search" placeholder="Search...">
+                        </form>
+                    </div>	
+                </div>-->
+                <div class="header-right2">
+                    <div class="cart box_1">
+                        <a href="<?php echo $sys['config']['site_url'] ?>/cart">
+                            <h3> 
+                                <div class="total">
+                                    <span class="simpleCart_total"><?php echo Sys_getCartTotal(); ?></span> (<span class="simpleCart_quantity"><?php echo Sys_getCartItemsCount(); ?></span> items)</div>
+                                <img src="http://visteriamedia.com/asia/themes/theme2/images/bag.png" alt="" />
+                            </h3>
+                        </a>
+                        <p><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
+                        <div class="clearfix"> </div>
+                    </div>	
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--header-->

@@ -1,0 +1,143 @@
+<?php
+//$category = Sys_getCategoryBySlug(trim($_GET['slug']));
+$fattributes = Sys_getFilterableAttributesByCatId($category['id']);
+if (isset($_GET['filter'])) {
+    $products = Sys_getProductsByCategoryId($category['id'], 0, -1);
+    $fproducts = array();
+    $filtered = array();
+    foreach ($fattributes as $fattribute) {
+        if (isset($_GET[$fattribute['id']])) {
+            $av = $_GET[$fattribute['id']];
+            $filtered[$fattribute['id']] = $av;
+            foreach ($products as $product) {
+                //echo $fattribute['id'];
+                //print_r($av);
+                if (in_array($product['attributes'][$fattribute['id']]['value'], $av)) {
+                    $fproducts[$product['id']] = $product;
+                }
+            }
+            $products = $fproducts;
+        }
+    }
+} else if (isset($_REQUEST['q'])) {
+    $query = trim($_REQUEST['q']);    
+    $products = Sys_getProductsByQuery($query, 0, 12);
+    Sys_addInSearch($query, $_SERVER['REMOTE_ADDR']);
+    
+} else {
+    //$products = Sys_getProductsByCategoryId($category['id'], 0, 12);
+}
+$lproducts = Sys_getLatestProducts();
+$mvproduct = Sys_getMostViewedProduct();
+?>
+<!-- Main Container Starts -->
+<div id="main-container" class="container">
+    <div class="row">
+        <!-- Primary Content Starts -->
+        <div class="col-md-9">
+            <!-- Breadcrumb Starts -->
+            <ol class="breadcrumb">
+                <li><a href="<?php echo $sys['config']['site_url']; ?>">Home</a></li>
+                <li class="active"><?php echo $query; ?></li>
+            </ol>
+            <!-- Breadcrumb Ends -->
+            <!-- Main Heading Starts -->
+            <h2 class="main-heading2">
+                <?php echo $category['name']; ?>
+            </h2>
+            <!-- Main Heading Ends -->
+            <!-- Category Intro Content Starts -->
+            <div class="row cat-intro">                
+                <div class="col-sm-12 /*cat-body*/">
+                    <h5>
+                        <?php echo "Showing result for .. " . $query ?>
+                    </h5>                            
+                </div>
+            </div>					
+            <!-- Category Intro Content Ends -->
+            
+            <!-- Product Grid Display Starts -->
+            <div class="" id="pcrow">                
+                <?php include 'cat-products-template.phtml'; ?>                    
+            </div>
+            <!-- Product Grid Display Ends -->            
+        </div>
+        <!-- Primary Content Ends -->
+        <!-- Sidebar Starts -->
+<div class="col-md-3">
+    <!-- Categories Links Starts -->
+    <h3 class="side-heading">Latest <?php echo $category['name']; ?></h3>
+    <div class="list-group">
+        <?php foreach ($lproducts as $lproduct){ ?>
+        <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>" class="list-group-item">
+            <i class="fa fa-chevron-right"></i>
+            <?php echo $lproduct['name']; ?>
+        </a>
+        <?php } ?>        
+    </div>
+    <!-- Categories Links Ends -->   
+    <!-- Bestsellers Links Starts -->
+    <h3 class="side-heading">Most Viewed Product</h3>
+    <div class="product-col">
+        <div class="image">
+            <?php                     
+            $images = $mvproduct['imagesR'];
+            $imageurl = "";
+            if (count($images) > 0) {
+                $imageurl = $images[0];
+            }
+            ?>
+            <img src="<?php echo $imageurl; ?>" alt="<?php echo $mvproduct['name'] ?>" class="img-responsive" />
+        </div>
+        <div class="caption">
+            <h4>
+                <a href="<?php echo $sys['config']['site_url'].'/product/'.$mvproduct['slug']; ?>"><?php echo $mvproduct['name']; ?></a>
+            </h4>
+            <div class="description">
+                <?php echo nl2br($mvproduct['short_description']); ?>
+            </div>
+            <div class="">
+                <span class=""><?php echo $mvproduct['likes']; ?> Likes</span> | <span class=""><?php echo $mvproduct['views']; ?> Views</span>                 
+            </div>
+            <div class="cart-button button-group">
+                <a href="<?php echo $sys['config']['site_url'].'/like?pid=' . $mvproduct['id']; ?>" title="Like" class="btn btn-wishlist">
+                    <i class="fa fa-thumbs-up"></i>
+                </a>
+                <a href="<?php echo $sys['config']['site_url'].'/compare?pid=' . $mvproduct['id']; ?>" title="Compare" class="btn btn-compare">
+                    <i class="fa fa-bar-chart-o"></i>
+                </a>
+                <a href="<?php echo $sys['config']['site_url'].'/product/' . $mvproduct['slug']; ?>" class="btn btn-cart">
+                    View Product
+                    <i class="fa fa-eye"></i> 
+                </a>						
+            </div>
+        </div>
+    </div>
+    <!-- Bestsellers Links Ends -->
+</div>
+<!-- Sidebar Ends -->
+            
+    </div>
+</div>
+<!-- Main Container Ends -->
+<script type="text/javascript">
+    var page = 1;
+    function viewmore() {
+        //$("#viewmore").click(function () {
+            $("#viewmore").hide();
+            $('#loading').show();
+            var lmurl = "<?php echo $sys['config']['site_url'] . '/requests.php?f=loadmoreproducts&cat=' . $category['slug']; ?>&page=" + page++;
+            $.ajax({
+                url: lmurl,
+                dataType: 'html',
+                success: function (html) {
+                    $('#pcrow').append(html);
+                    $('#loading').hide();
+                    if (html.trim() !== "") {
+                        $("#viewmore").show();
+                    }
+                }
+            });
+        //});
+    }
+</script>

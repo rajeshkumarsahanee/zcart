@@ -1,0 +1,49 @@
+attribute terms update solution(attribute-terms.php)
+slider/banner option in theme options
+Featured Products (Home Page) in theme options
+Recommended Items (Home Page) in theme options
+Recommended Items (Product Page) in theme options
+Customer Bought Items (Product Page) in theme options
+Customer Bought Items (Cart Page) in theme options
+payment methods in settings-portal
+update Email Verification template for otp and use this template to send otp on email change
+
+sale price | discount | price | price_gst | commission | commission_gst | customization_price | customization_price_gst | amount | quantity | shipping_charges | total
+amount => price + commission + customization_price + price_gst + commission_gst + customization_price_gst
+total = amount * quantity + shipping_charges
+refund amount = price
+refund total = refund_amount + refund_amount_gst + refund_commission + refund_commission_gst
+
+****** straight calculation ******
+sale price => price
+price => price or special price or quantity discount price entered by admin/seller
+discount => sale price - price
+
+** calculate commission and tax from price **
+product_price = price
+product_tax = price * tax_percent
+commission = price * commission_percent
+commission_tax = commission * 18% gst
+price = product_price + product_tax + commission + commission_tax
+
+buying_price = price + customization price
+total = buying price * quantity
+****** straight calculation ******
+
+****** reverse calculation ******
+sale price => price
+price => price or special price or quantity discount price entered by admin/seller = 1000
+discount => sale price - price
+
+** extract commission and tax from price **
+price_without_tax = (price / (1 + tax_percent)) => 1000/1.18 => 847.457627119
+total_tax = price - price_without_tax => 1000 - 847.457627119 => 152.542372881
+commission_without_tax = price_without_tax - (price_without_tax / 1 + commission_percent) => 847.4576 - 847.4576 / 1.10 => 847.4576 - 770.416 => 77.0416
+price_without_tax_n_commission = price_without_tax - commission_without_tax => 847.4576 - 77.0416 => 770.416
+product_tax = price_without_tax_n_commission * tax_percent => 770.416 * 0.18 => 138.67488
+commission_tax = commission_without_tax * 18% => 77.0416 * 0.18 => 13.8626
+[770.416+138.67488+77.0416+13.8626 => 999.99508]
+
+buying price = price + customization price
+total = buying price * quantity 
+****** reverse calculation ******

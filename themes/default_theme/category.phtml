@@ -1,0 +1,121 @@
+<?php
+$category = Sys_getCategoryBySlug(trim($_GET['slug']));
+$fattributes = Sys_getFilterableAttributesByCatId($category['id']);
+if (isset($_GET['filter'])) {
+    $products = Sys_getProductsByCategoryId($category['id'], 0, -1);
+    $fproducts = array();
+    $filtered = array();
+    foreach ($fattributes as $fattribute) {
+        if (isset($_GET[$fattribute['id']])) {
+            $av = $_GET[$fattribute['id']];
+            $filtered[$fattribute['id']] = $av;
+            foreach ($products as $product) {
+                //echo $fattribute['id'];
+                //print_r($av);
+                if (in_array($product['attributes'][$fattribute['id']]['value'], $av)) {
+                    $fproducts[$product['id']] = $product;
+                }
+            }
+            $products = $fproducts;
+        }
+    }
+} else if (isset($_REQUEST['q'])) {
+    $query = trim($_REQUEST['q']);
+    $products = Sys_getProductsByCategoryIdAndQuery($category['id'], trim($_REQUEST['q']), 0, 12);
+} else {
+    $products = Sys_getProductsByCategoryId($category['id'], 0, 12);
+}
+$lproducts = Sys_getLatestProducts($category['id']);
+$mvproduct = Sys_getMostViewedProduct($category['id']);
+?>
+<!-- Main Container Starts -->
+<div id="main-container" class="container">
+    <div class="row">
+        <!-- Primary Content Starts -->
+        <div class="col-md-9">
+            <!-- Breadcrumb Starts -->
+            <ol class="breadcrumb">
+                <li><a href="<?php echo $sys['config']['site_url']; ?>">Home</a></li>
+                <li class="active"><?php echo $category['name']; ?></li>
+            </ol>
+            <!-- Breadcrumb Ends -->
+            <!-- Main Heading Starts -->
+            <h2 class="main-heading2">
+                <?php echo $category['name']; ?>
+            </h2>
+            <!-- Main Heading Ends -->
+            <!-- Category Intro Content Starts -->
+            <div class="row cat-intro">
+                <div class="col-sm-12">
+                    <img src="<?php echo $category['image']; ?>" alt="Image" class="img-responsive" />
+                </div>
+                <div class="col-sm-12 /*cat-body*/">
+                    <p>
+                        <?php echo $category['description']; ?>
+                    </p>                            
+                </div>
+            </div>					
+            <!-- Category Intro Content Ends -->
+            <!-- Product Filter Starts -->
+            <div class="product-filter">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php
+                        if (isset($query)) {
+                            echo 'Search result for .. <b>' . $query . '</b>';
+                        }
+                        ?>
+                    </div>
+                    <div class="col-md-4 text-right">
+
+                    </div>                                          
+                    <div class="col-md-4 text-right">
+                        <form>
+                            <input type="text" class="form-control" name="q" placeholder="<?php echo 'Search within ' . $category['name']; ?>"/>
+                        </form>
+                    </div>
+                </div>						 
+            </div>
+            <!-- Product Filter Ends -->
+            <!-- Product Grid Display Starts -->
+            <div class="" id="pcrow">
+                <div class="col-md-12">
+                    <div class="row">
+                        <?php include 'cat-products-template.phtml'; ?>
+                    </div>
+                </div>                
+            </div>
+            <!-- Product Grid Display Ends -->
+            <?php if (!isset($filtered)) { ?>
+                <div style="margin: auto; text-align: center;">
+                    <button class="form-control" id="viewmore" onclick="viewmore()">View More</button>
+                    <span id="loading" class="fa fa-spinner fa-spin" style="font-size: 30px; display: none;"></span>
+                </div>
+            <?php } ?>
+        </div>
+        <!-- Primary Content Ends -->
+        <?php include 'category_sidebar.phtml'; ?>        
+    </div>
+</div>
+<!-- Main Container Ends -->
+<script type="text/javascript">
+    var page = 1;
+    function viewmore() {
+        //$("#viewmore").click(function () {
+            $("#viewmore").hide();
+            $('#loading').show();
+            var lmurl = "<?php echo $sys['config']['site_url'] . '/requests.php?f=loadmoreproducts&cat=' . $category['slug']; ?>&page=" + page++;
+            $.ajax({
+                url: lmurl,
+                dataType: 'html',
+                success: function (html) {
+                    $('#pcrow').append(html);
+                    $('#loading').hide();
+                    if (html.trim() !== "") {
+                        $("#viewmore").show();
+                    }
+                }
+            });
+        //});
+    }
+</script>

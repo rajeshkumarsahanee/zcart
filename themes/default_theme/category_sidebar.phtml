@@ -1,0 +1,104 @@
+<!-- Sidebar Starts -->
+<div class="col-md-3">
+    <!-- Categories Links Starts -->
+    <h3 class="side-heading">Latest <?php echo $category['name']; ?></h3>
+    <div class="list-group">
+        <?php foreach ($lproducts as $lproduct){ ?>
+        <a href="<?php echo $sys['config']['site_url'].'/product/' . $lproduct['slug']; ?>" class="list-group-item">
+            <i class="fa fa-chevron-right"></i>
+            <?php echo $lproduct['name']; ?>
+        </a>
+        <?php } ?>        
+    </div>
+    <!-- Categories Links Ends -->
+    <form>
+    <!-- Shopping Options Starts -->
+    <h3 class="side-heading">Shopping Options</h3>
+    <div class="list-group">
+        <?php foreach($fattributes as $fattribute){ ?>
+        <div class="list-group-item">
+            <?php echo $fattribute['name']; ?>
+            <?php if(count($fattribute['termsR']) > 10) { ?>
+            <input type="text" class="form-control" id="<?php echo $fattribute['id'] ?>" placeholder="Search..." onkeyup="search(<?php echo $fattribute['id'] ?>)"/>
+            <?php } ?>
+        </div>
+        <div class="list-group-item" style="max-height: 150px; overflow-y: auto;">
+            <div class="filter-group">
+                <?php foreach($fattribute['termsR'] as $fterm){ 
+                    $checked = "";
+                    if(isset($filtered) && array_key_exists($fattribute['id'], $filtered) && in_array($fterm, $filtered[$fattribute['id']])){
+                        $checked = 'checked';
+                    }
+                    ?>
+                <label class="checkbox" name="<?php echo "l".$fattribute['id']; ?>">
+                    <input name="<?php echo $fattribute['id']."[]"; ?>" type="checkbox" value="<?php echo $fterm; ?>" <?php echo $checked; ?>/>
+                    <?php echo $fterm; ?>
+                </label>
+                <?php } ?>               
+            </div>
+        </div>
+        <?php } ?>        
+        <div class="list-group-item">
+            <button name="filter" value="1" type="submit" class="btn btn-warning">Filter</button>
+        </div>
+    </div>
+    </form>
+    <!-- Shopping Options Ends -->
+    <!-- Bestsellers Links Starts -->
+    <h3 class="side-heading">Most Viewed Product</h3>
+    <div class="product-col">
+        <div class="image">
+            <?php                     
+            $images = $mvproduct['imagesR'];
+            $imageurl = "";
+            if (count($images) > 0) {
+                $imageurl = $images[0];
+            }
+            ?>
+            <img src="<?php echo $imageurl; ?>" alt="<?php echo $mvproduct['name'] ?>" class="img-responsive" />
+        </div>
+        <div class="caption">
+            <h4>
+                <a href="<?php echo $sys['config']['site_url'].'/product/'.$mvproduct['slug']; ?>"><?php echo $mvproduct['name']; ?></a>
+            </h4>
+            <div class="description">
+                <?php echo nl2br($mvproduct['short_description']); ?>
+            </div>
+            <div class="">
+                <span class=""><?php echo $mvproduct['likes']; ?> Likes</span> | <span class=""><?php echo $mvproduct['views']; ?> Views</span>                 
+            </div>
+            <div class="cart-button button-group">
+                <a href="<?php echo $sys['config']['site_url'].'/like?pid=' . $mvproduct['id']; ?>" title="Like" class="btn btn-wishlist">
+                    <i class="fa fa-thumbs-up"></i>
+                </a>
+                <a href="<?php echo $sys['config']['site_url'].'/compare?pid=' . $mvproduct['id']; ?>" title="Compare" class="btn btn-compare">
+                    <i class="fa fa-bar-chart-o"></i>
+                </a>
+                <a href="<?php echo $sys['config']['site_url'].'/product/' . $mvproduct['slug']; ?>" class="btn btn-cart">
+                    View Product
+                    <i class="fa fa-eye"></i> 
+                </a>						
+            </div>
+        </div>
+    </div>
+    <!-- Bestsellers Links Ends -->
+</div>
+<!-- Sidebar Ends -->
+<script>
+function search(id){
+    var q = $("#"+id).val().toLowerCase();
+    $('label').each(function(){
+        var label = $(this);        
+        
+        if(label.attr('name') == "l"+id){
+            //alert("|"+label.text().trim()+"|");
+            var searchIn = label.text().trim().toLowerCase();
+            if(searchIn.indexOf(q) >= 0){
+                label.show();
+            } else {
+                label.hide();
+            }
+        }
+    });
+}
+</script>

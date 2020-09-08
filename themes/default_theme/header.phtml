@@ -1,0 +1,187 @@
+<?php 
+    $rootcategories = Sys_getRootCategories(1);
+    $categories = Sys_getCategories();
+?>
+<!-- Header Section Starts -->
+<header id="header-area">
+    <!-- Header Top Starts -->
+    <!--            <div class="header-top">
+                    <div class="container">
+                         Header Links Starts 
+                        <div class="col-sm-8 col-xs-12">
+                            <div class="header-links">
+                                <ul class="nav navbar-nav pull-left">
+                                    <li>
+                                        <a href="<?php echo $sys['config']['site_url'] ?>">
+                                            <i class="fa fa-home" title="Home"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Home
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">	
+                                            <i class="fa fa-heart" title="Wish List"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Wish List(0)
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user" title="My Account"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                My Account
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="cart.html">
+                                            <i class="fa fa-shopping-cart" title="Shopping Cart"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Shopping Cart
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-crosshairs" title="Checkout"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Checkout
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="register.html">
+                                            <i class="fa fa-unlock" title="Register"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Register
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="login.html">
+                                            <i class="fa fa-lock" title="Login"></i>
+                                            <span class="hidden-sm hidden-xs">
+                                                Login
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                         Header Links Ends 
+                         Currency & Languages Starts 
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="pull-right">
+                                 Currency Starts 
+                                <div class="btn-group">
+                                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                        Currency
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="pull-right dropdown-menu">
+                                        <li><a tabindex="-1" href="#">Pound </a></li>
+                                        <li><a tabindex="-1" href="#">US Dollar</a></li>
+                                        <li><a tabindex="-1" href="#">Euro</a></li>
+                                    </ul>
+                                </div>
+                                 Currency Ends 
+                                 Languages Starts 
+                                <div class="btn-group">
+                                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                        Language
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="pull-right dropdown-menu">
+                                        <li>
+                                            <a tabindex="-1" href="#">English</a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="#">French</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                 Languages Ends 
+                            </div>
+                        </div>
+                         Currency & Languages Ends 
+                    </div>
+                </div>-->
+    <!-- Header Top Ends -->
+    <!-- Starts -->
+    <div class="container">
+        <!-- Main Header Starts -->
+        <div class="main-header">
+            <div class="row">
+                <!-- Logo Starts -->
+                <div class="col-md-6">
+                    <div id="logo">
+                        <a href="<?php echo $sys['config']['site_url']; ?>"><img src="<?php echo $sys['config']['theme_url']; ?>/images/logo.png" title="eValueBazaar" alt="eValueBazaar" class="img-responsive" /></a>
+                    </div>
+                </div>
+                <!-- Logo Starts -->
+                <!-- Search Starts -->
+                <div class="col-md-6">
+                    <div id="search">
+                        <form action="<?php echo $sys['config']['site_url']; ?>/search" autocomplete="off">
+                            <div class="input-group">
+                                <input id="qinput" type="text" name="q" class="form-control input-lg" placeholder="Search">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-lg" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="suggestions" style="background-color: white; z-index: 99999; position: absolute; width: 95%;">
+
+                    </div>
+                </div>
+                <!-- Search Ends -->
+                <!-- Shopping Cart Starts -->
+                <?php //$this->load->view('header_cart'); ?>
+                <!-- Shopping Cart Ends -->
+            </div>
+        </div>
+        <!-- Main Header Ends -->
+        <!-- Main Menu Starts -->
+        <nav id="main-menu" class="navbar" role="navigation">
+            <!-- Nav Header Starts -->
+            <div class="navbar-header">
+                <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-cat-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <!-- Nav Header Ends -->
+            <!-- Navbar Cat collapse Starts -->
+            <div class="collapse navbar-collapse navbar-cat-collapse">
+                <ul class="nav navbar-nav">
+                    <?php foreach ($rootcategories as $rootcategory) { ?>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" data-hover="dropdown" data-delay="10"><?php echo $rootcategory['name'] ?></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <?php
+                                foreach ($categories as $category) {
+                                    if ($category['main_category'] != $rootcategory['id']) {
+                                        continue;
+                                    }
+                                    ?>
+                                    <li><a tabindex="-1" href="<?php echo $sys['config']['site_url'].'/category/' . $category['slug'] ?>"><?php echo $category['name']; ?></a></li>
+                                <?php } ?>                                        
+                            </ul>
+
+                        </li>
+                    <?php } ?>                            
+                </ul>
+            </div>
+            <!-- Navbar Cat collapse Ends -->
+        </nav>
+        <!-- Main Menu Ends -->
+    </div>
+    <!-- Ends -->
+
+</header>
+<!-- Header Section Ends -->

@@ -1,0 +1,45 @@
+<?php
+foreach ($products as $product) {    
+    $images = $product['imagesR'];
+    $imageurl = "";
+    if (count($images) > 0) {
+        $imageurl = $images[0];
+    }   
+    ?>
+    <!-- Product Starts -->
+    <div class="product-tab1">
+            <div class="col-md-4 product-tab1-grid">
+                <div class="grid-arr">
+                    <div  class="grid-arrival">
+                        <figure>		
+                            <a href="#" class="new-gri" data-toggle="modal" data-target="#myModal1">
+                                <div class="grid-img">
+                                    <img  src="<?php echo $imageurl; ?>" class="img-responsive" alt="">
+                                </div>
+                                <div class="grid-img">
+                                    <img  src="<?php echo $imageurl; ?>" class="img-responsive"  alt="">
+                                </div>			
+                            </a>		
+                        </figure>	
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 product-tab1-grid1 simpleCart_shelfItem">
+                <div class="block">
+                    <div class="starbox small ghosting"> </div>
+                </div>
+                <div class="women">
+                    <h6><a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>"><?php echo $product['name'] ?></a></h6>
+                    <span class="size">XL / XXL / S </span>
+                    <p><?php echo nl2br($product['short_description']); ?></p>
+                    <p ><del><i class="fa fa-inr"></i> 100.00</del><em class="item_price"<i class="fa fa-inr"></i> <?php echo $product['sellers'][$sys['config']['defaultSeller']]['price']; ?></em></p>                    
+                    <a href="<?php echo $sys['config']['site_url'].'/product/' . $product['slug']; ?>" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    <!-- Product Ends -->
+    <?php
+}
+
+?> 

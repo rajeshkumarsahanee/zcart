@@ -1,0 +1,211 @@
+<?php
+$cartitems = Sys_getCartItems();
+$cartitemscount = Sys_getCartItemsCount();
+$carttotal = Sys_getCartTotal();
+$tax = 0;
+$shipping = 100;
+$total = $carttotal + $shipping - $tax;
+$payable_amount = $total;
+$states = getStates();
+
+$user = Sys_getUserData($_SESSION['username']);
+$bfirst_name = isset($user['metas']['First_Name'])? $user['metas']['First_Name'] : "";
+$blast_name = isset($user['metas']['Last_Name'])? $user['metas']['Last_Name'] : "";
+$bemail = $user['email'];
+
+$paymentmode = "Online";
+$couponcode = "";
+$couponamount = "";
+
+?>
+<!--banner-->
+<!--<div class="banner1">
+    <div class="container">
+        <h3><a href="<?php echo $sys['config']['site_url']; ?>">Home</a> / <span>Checkout</span></h3>
+    </div>
+</div>-->
+<style>
+    .adjust-td-padding tbody tr td {
+        padding: 5px !important;
+    }
+</style>
+<!--banner-->
+<div class="content">
+    <div class="cart-items">
+        <div class="container">
+            <form id="checkoutform" name="checkoutform" method="post" action="<?php echo $sys['config']['site_url'].'/requests.php?f=checkout'; ?>">
+                <div class="grid_3 grid_5">
+                    <h3>Please enter your contact information.</h3>
+                    <div class="col-md-6">
+                        <p>Billing Address</p>
+                        <table class="table table-bordered adjust-td-padding">
+                                <tbody>
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td><input type="text" class="form-control" name="billingfname" value="<?php echo $bfirst_name; ?>" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td><input type="text" class="form-control" name="billinglname" value="<?php echo $blast_name; ?>" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Id</td>
+                                        <td><input type="email" class="form-control" name="billingemail" value="<?php echo $bemail; ?>" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td><input type="text" class="form-control" name="billingmobile" maxlength="10" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td><input type="text" class="form-control" name="billingphone" maxlength="10" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address</td>
+                                        <td><textarea name="billingaddress" class="form-control"></textarea></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>City</td>
+                                        <td><input type="text" name="billingcity" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>State</td>
+                                        <td>
+                                            <select  name="billingstate" title="State/Province" class="form-control" required="">
+                                                <option value="">- State -</option>
+                                                <?php foreach($states as $key => $value) { ?>
+                                                <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                                <?php } ?>                                                
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pincode</td>
+                                        <td><input type="text" name="billingzip" class="form-control"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Country</td>
+                                        <td>
+                                            <select name="billingcountry" title="Country" class="form-control" required="">
+                                                <option value=""> - Country - </option>
+                                                <option value="India"> India </option>
+                                            </select>
+                                        </td>
+                                    </tr>                                    
+                                </tbody>                            
+                        </table>       
+                    </div>
+                    <div class="col-md-6">
+                        <p>Shipping Address</p>
+                        <table class="table table-bordered adjust-td-padding">                            
+                                <tbody>
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td><input type="text" class="form-control" name="shippingfname" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td><input type="text" class="form-control" name="shippinglname" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Id</td>
+                                        <td><input type="email" class="form-control" name="shippingemail" value="<?php echo $bemail; ?>" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td><input type="text" class="form-control" name="shippingmobile" maxlength="10" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td><input type="text" class="form-control" name="shippingphone" maxlength="10" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address</td>
+                                        <td><textarea name="shippingaddress" class="form-control"></textarea></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>City</td>
+                                        <td><input type="text" name="shippingcity" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>State</td>
+                                        <td>
+                                            <select  name="shippingstate" title="State/Province" class="form-control" required="">
+                                                <option value="">- State -</option>
+                                                <?php foreach($states as $key => $value) { ?>
+                                                <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pincode</td>
+                                        <td><input type="text" name="shippingzip" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Country</td>
+                                        <td>
+                                            <select name="shippingcountry" title="Country" class="form-control" required="">
+                                                <option value=""> - Country - </option>
+                                                <option value="India"> India </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>                            
+                        </table>       
+                    </div>
+                    <div class="clearfix"> </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered adjust-td-padding">
+                            <tr>
+                                <th colspan="2">Account Summary</th>
+                            </tr>                            
+                            <tr>
+                                <td>Total Qty </td>
+                                <td><?php echo $cartitemscount; ?> </td>
+                            </tr>
+                            <tr>
+                                <td>Amount </td>
+                                <td><?php echo $carttotal; ?> </td>
+                            </tr>
+                            <tr>
+                                <td>Tax </td>
+                                <td><?php echo $tax; ?> </td>
+                            </tr>
+                            <tr>
+                                <td>Shipping </td>
+                                <td><?php echo $shipping; ?> </td>
+                            </tr>
+                            <tr>
+                                <td>Total </td>
+                                <td><?php echo $total; ?> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><p><b>* Note:</b> You will now be directed to the payment gateway, so please do not refresh or press back button after placing order until you are redirected back to our website</p></td>
+                            </tr>
+                        </table>                        
+                    </div>
+                    <div class="col-md-12">
+                        <input type="hidden" name="email" value="<?php echo $email; ?>"/>                        
+                        <input type="hidden" name="total_amount" value="<?php echo $total; ?>"/>
+                        <input type="hidden" name="payable_amount" value="<?php echo $payable_amount; ?>"/>
+                        <input type="hidden" name="paymentmode" value="<?php echo $paymentmode; ?>"/>
+                        <input type="hidden" name="couponcode" value="<?php echo $couponcode ?>"/>
+                        <input type="hidden" name="couponamount" value="<?php echo $couponamount ?>"/>
+                        <input type="hidden" name="taxamount" value="<?php echo $tax ?>"/>
+                        <input type="hidden" name="shippingamount" value="<?php echo $shipping ?>"/>
+                        <input type="hidden" name="totalqty" value="<?php echo $cartitemscount ?>"/>
+                        <input type="hidden" name="note" value=""/>
+                        <input type="hidden" name="saveorder" value="1"/>
+                        <input type="submit" name="submit" value="Proceed To Pay" class="btn btn-primary pull-right"/>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <!-- checkout -->	
+</div>

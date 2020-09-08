@@ -1,0 +1,212 @@
+<?php
+if (isset($_REQUEST['rpid'])) {
+    $rpid = trim($_REQUEST['rpid']);
+    if (isset($_SESSION['cpid1']) && $_SESSION['cpid1'] == $rpid) {
+        unset($_SESSION['cpid1']);
+    } else if (isset($_SESSION['cpid2']) && $_SESSION['cpid2'] == $rpid) {
+        unset($_SESSION['cpid2']);
+    } else if (isset($_SESSION['cpid3']) && $_SESSION['cpid3'] == $rpid) {
+        unset($_SESSION['cpid3']);
+    } else if (isset($_SESSION['cpid4']) && $_SESSION['cpid4'] == $rpid) {
+        unset($_SESSION['cpid4']);
+    }
+}
+
+if (isset($_REQUEST['pid'])) {
+    $pid = trim($_REQUEST['pid']);
+    if ($pid != $_SESSION['cpid1'] && $pid != $_SESSION['cpid2'] && $pid != $_SESSION['cpid3'] && $pid != $_SESSION['cpid4']) {
+        if (!isset($_SESSION['cpid1'])) {
+            $_SESSION['cpid1'] = trim($_REQUEST['pid']);
+        } else if (!isset($_SESSION['cpid2'])) {
+            $_SESSION['cpid2'] = trim($_REQUEST['pid']);
+        } else if (!isset($_SESSION['cpid3'])) {
+            $_SESSION['cpid3'] = trim($_REQUEST['pid']);
+        } else if (!isset($_SESSION['cpid4'])) {
+            $_SESSION['cpid4'] = trim($_REQUEST['pid']);
+        } else {
+            $_SESSION['cpid4'] = trim($_REQUEST['pid']);
+        }
+    }
+}
+
+$product1 = $product2 = $product3 = $product4 = null;
+if(isset($_SESSION['cpid1'])) {
+    $product1 = Sys_getProduct($_SESSION['cpid1']);
+}
+if(isset($_SESSION['cpid2'])) {
+    $product2 = Sys_getProduct($_SESSION['cpid2']);
+}
+if(isset($_SESSION['cpid3'])) {
+    $product3 = Sys_getProduct($_SESSION['cpid3']);
+}
+if(isset($_SESSION['cpid4'])) {
+    $product4 = Sys_getProduct($_SESSION['cpid4']);
+}
+?>
+<!-- Main Container Starts -->
+<div id="main-container" class="container">
+    <!-- Breadcrumb Starts -->
+    <ol class="breadcrumb">
+        <li><a href="<?php echo $sys['config']['site_url']; ?>">Home</a></li>
+        <li class="active">Compare Products</li>
+    </ol>
+    <!-- Breadcrumb Ends -->
+    <!-- Main Heading Starts -->
+    <h2 class="main-heading text-center">
+        Compare Products
+    </h2>
+    <!-- Main Heading Ends -->
+    <?php
+    if ($product1 == null && $product2 == null && $product3 == null && $product4 == null) {
+        echo "You have not selected any product";
+    } else {
+        ?>
+        <!-- Compare Table Starts -->            
+        <div class="table-responsive compare-table">                
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <?php if ($product1 != NULL) { ?>
+                        <td><a href="<?php echo $sys['config']['site_url'].'/product/' . $product1['slug']; ?>"><?php echo $product1['name']; ?></a></td>
+                        <?php } ?>
+                        <?php if ($product2 != NULL) { ?>
+                        <td><a href="<?php echo $sys['config']['site_url'].'/product/' . $product2['slug']; ?>"><?php echo $product2['name']; ?></a></td>
+                        <?php } ?>
+                        <?php if ($product3 != NULL) { ?>
+                        <td><a href="<?php echo $sys['config']['site_url'].'/product/' . $product3['slug']; ?>"><?php echo $product3['name']; ?></a></td>
+                        <?php } ?>
+                        <?php if ($product4 != NULL) { ?>
+                        <td><a href="<?php echo $sys['config']['site_url'].'/product/' . $product4['slug']; ?>"><?php echo $product4['name']; ?></a></td>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <?php if ($product1 != NULL) { ?>
+                            <td>
+                                <img src="<?php echo $product1['imagesR'][0]; ?>" alt="image" title="image" class="img-thumbnail" style="height: 150px;">
+                                <br/><a class="btn btn-sm btn-danger" href="<?php echo $sys['config']['site_url'].'/compare?rpid=' . $product['id']; ?>">Remove</a>
+                            </td>
+                        <?php } ?>
+                        <?php if ($product2 != NULL) { ?>
+                            <td>
+                                <img src="<?php echo $product2['imagesR'][0]; ?>" alt="image" title="image" class="img-thumbnail" style="height: 150px;">
+                                <br/><a class="btn btn-sm btn-danger" href="<?php echo $sys['config']['site_url'].'/compare?rpid=' . $product2['id']; ?>">Remove</a>
+                            </td>
+                        <?php } ?>
+                        <?php if ($product3 != NULL) { ?>
+                            <td>
+                                <img src="<?php echo $product3['imagesR'][0]; ?>" alt="image" title="image" class="img-thumbnail" style="height: 150px;">
+                                <br/><a class="btn btn-sm btn-danger" href="<?php echo $sys['config']['site_url'].'/compare?rpid=' . $product3['id']; ?>">Remove</a>
+                            </td>
+                        <?php } ?>
+                        <?php if ($product4 != NULL) { ?>
+                            <td>
+                                <img src="<?php echo $product4['imagesR'][0]; ?>" alt="image" title="image" class="img-thumbnail" style="height: 150px;">
+                                <br/><a class="btn btn-sm btn-danger" href="<?php echo $sys['config']['site_url'].'/compare?rpid=' . $product4['id']; ?>">Remove</a>
+                            </td>
+                            <?php } ?>
+                    </tr>
+                    <?php
+                    if ($product1 != NULL) {
+                        foreach ($product1['attributes'] as $attribute) {
+                            if ($attribute['value'] == '') {
+                                continue;
+                            }
+                            if ($product2 != null && $product2['attributes'][$attribute['id']]['value'] == '') {
+                                continue;
+                            }
+                            if ($product3 != null && $product3['attributes'][$attribute['id']]['value'] == '') {
+                                continue;
+                            }
+                            if ($product4 != null && $product4['attributes'][$attribute['id']]['value'] == '') {
+                                continue;
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $attribute['name']; ?></td>
+                                <td><?php echo $attribute['value']; ?></td>
+                                <?php if ($product2 != NULL) { ?>
+                                    <td><?php echo $product2['attributes'][$attribute['id']]['value']; ?></td>
+                                <?php } ?>
+                                <?php if ($product3 != NULL) { ?>
+                                    <td><?php echo $product3['attributes'][$attribute['id']]['value']; ?></td>
+                                <?php } ?>
+                                <?php if ($product4 != NULL) { ?>
+                                    <td><?php echo $product4['attributes'][$attribute['id']]['value']; ?></td>
+                                <?php } ?>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                    <tr><th colspan="5">Prices</th></tr>
+                    <?php
+                    if ($product1 != NULL) {
+                        foreach ($product1['sellers'] as $seller) {
+                            ?>
+                            <tr>
+                                <td><?php echo $seller['name']; ?></td>
+                                <td>
+                                    <?php
+                                    if ($seller['price'] > 0) {
+                                        echo '<i class="fa fa-inr"></i>' . $seller['price'];
+                                        echo '<br/><a class="btn btn-cart" href="' . $sys['config']['site_url']. "/buynow?pid=" . $product1['id'] . "&sid=" . $seller['id'] . '">Buy Now</a>';
+                                    } else {
+                                        echo "-";
+                                    }
+                                    ?>
+                                </td>
+                                <?php if ($product2 != NULL) { ?>
+                                    <td>
+                                        <?php
+                                        $p2seller = $product2['sellers'][$seller['id']];
+                                        if ($p2seller['price'] > 0) {
+                                            echo '<i class="fa fa-inr"></i>' . $p2seller['price'];
+                                            echo '<br/><a class="btn btn-cart" href="' . $sys['config']['site_url']. "/buynow?pid=" . $product2['id'] . "&sid=" . $p2seller['id'] . '">Buy Now</a>';
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                                <?php if ($product3 != NULL) { ?>
+                                    <td>
+                                        <?php
+                                        $p3seller = $product3['sellers'][$seller['id']];
+                                        if ($p3seller['price'] > 0) {
+                                            echo '<i class="fa fa-inr"></i>' . $p3seller['price'];
+                                            echo '<br/><a class="btn btn-cart" href="' . $sys['config']['site_url']. "/buynow?pid=" . $product3['id'] . "&sid=" . $p3seller['id'] . '">Buy Now</a>';
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                                <?php if ($product4 != NULL) { ?>
+                                    <td>
+                                        <?php
+                                        $p4seller = $product4['sellers'][$seller['id']];
+                                        if ($p4seller['price'] > 0) {
+                                            echo '<i class="fa fa-inr"></i>' . $p4seller['price'];
+                                            echo '<br/><a class="btn btn-cart" href="' . $sys['config']['site_url']. "/buynow?pid=" . $product4['id'] . "&sid=" . $p4seller['id'] . '">Buy Now</a>';
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- Compare Table Ends -->
+    <?php } ?>
+</div>
+<!-- Main Container Ends -->
